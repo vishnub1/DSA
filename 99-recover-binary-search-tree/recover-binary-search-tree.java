@@ -14,49 +14,38 @@
  * }
  */
 class Solution {
-    private TreeNode first;   // The first node that violates the BST property
-    private TreeNode middle;  // The middle node that violates the BST property
-    private TreeNode last;    // The last node that violates the BST property
-    private TreeNode prev;    // The previous node during the inorder traversal
+    
+    static TreeNode prev, first, second;
 
     public void inorder(TreeNode root) {
         if(root == null) return;
 
         inorder(root.left);
-        // check if the current node violates the BST property 
-        if(prev != null && (root.val < prev.val)) {
-            // first voilation 
-            if(first == null) {
+        // all logic here 
+        if(prev != null && prev.val > root.val) {
+            if(first == null) { // first violation
                 first = prev;
-                middle = root;
-            } else { // second voilation 
-                last = root;
+                second = root;
+            } else { // second voilation   (first != null) 
+                second = root;
             }
         }
 
-        // set the prev to curr node
         prev = root;
         inorder(root.right);
     }
 
-
     public void recoverTree(TreeNode root) {
-        first = middle = last = null;
+        prev = first = second = null;
 
-        // initialize prev to a node with the max -ve
-        prev = new TreeNode(Integer.MIN_VALUE);
-
+        // inorder traversal
         inorder(root);
 
-        // swap 
-        if(first != null && last != null) {
+        // swaping that voilating nodes values 
+        if(first != null && second != null) {
             int temp = first.val;
-            first.val = last.val;
-            last.val = temp;
-        } else if (first != null && middle != null) {
-            int temp = first.val;
-            first.val = middle.val;
-            middle.val = temp;
-        }
+            first.val = second.val;
+            second.val = temp;
+        }    
     }
 }
