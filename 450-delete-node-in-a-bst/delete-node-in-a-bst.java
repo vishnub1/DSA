@@ -14,51 +14,32 @@
  * }
  */
 class Solution {
-    // Detete Function
-    public TreeNode delete(TreeNode root) {
-        if(root.left == null) {
-            return root.right;
-        } else if(root.right == null) {
-            return root.left;
-        } else {
-            // when both left and right child present 
-            TreeNode rightChild = root.right; // join with max from left part
-            TreeNode maxLeft = maxFromLeft(root.left);
-            maxLeft.right = rightChild;
-            return root.left;
+    // FIND MIN 
+    public TreeNode findMin(TreeNode node) {
+        while(node.left != null) {
+            node = node.left;
         }
+        return node;
     }
-
-    public TreeNode maxFromLeft(TreeNode root) {
-        if(root.right == null) return root;
-        return maxFromLeft(root.right);
-    }
-
+    
     public TreeNode deleteNode(TreeNode root, int key) {
         if(root == null) return null;
 
-        if(root.val == key) {
-            return delete(root);
-        }
-
-        TreeNode copy = root; // for returning after delete root 
-
-        while(root != null) {
-            if(root.val > key) {
-                if(root.left != null && root.left.val == key) {
-                    root.left = delete(root.left);
-                    break;
-                } else {
-                    root = root.left; // go deep 
-                }
-            } else {  //root.val < key
-                if(root.right != null && root.right.val == key) {
-                    root.right = delete(root.right);
-                } else {
-                    root = root.right; // go deep
-                }
+        if(key < root.val) {
+            root.left = deleteNode(root.left, key);
+        } else if(key > root.val) {
+            root.right = deleteNode(root.right, key);
+        } else {  // apan tya value vr ahot jayla aapyala delete karaycha ahe 
+            if(root.left == null) {
+                return root.right;
+            } else if (root.right == null){
+                return root.left;
+            } else { // both != null
+                TreeNode minNode = findMin(root.right);
+                root.val = minNode.val;
+                root.right = deleteNode(root.right, root.val);
             }
         }
-        return copy; // original root
+        return root;
     }
 }
