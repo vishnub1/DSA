@@ -1,3 +1,3 @@
 <h2>two-sum-iv-input-is-a-bst Notes</h2><hr>HashSet
-O(N)
+TC - O(N)
 O(N)
