@@ -14,19 +14,23 @@
  * }
  */
 class Solution {
-    
-    List<Integer> list = new ArrayList<>();
-    
     public int kthSmallest(TreeNode root, int k) {
-        inorder(root);
-        return list.get(k - 1);
-    }
+        Stack<TreeNode> st = new Stack<>();  // for iterative inorder traversal
 
-   // Storing val through inorder "Stored in sorted order"
-    public void inorder(TreeNode root) {
-        if(root == null) return;
-        inorder(root.left);
-        list.add(root.val);
-        inorder(root.right);
+        while(root != null || !st.isEmpty()) {
+            while(root != null) {   // push all left 
+                st.push(root);
+                root = root.left;
+            }
+
+            root = st.pop();
+            k--;
+            if(k == 0) {
+                return root.val;
+            } 
+
+            root = root.right;  // move to right subtree
+        }
+        return -1;  // if k'th val is not found 
     }
 }
