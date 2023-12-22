@@ -1,1 +1,1 @@
-<h2>find-pivot-index Notes</h2><hr>Better SC
+<h2>find-pivot-index Notes</h2><hr>Better S>C
