@@ -1,29 +1,19 @@
 class Solution {
     public int pivotIndex(int[] nums) {
-        int n = nums.length;
+        int rightSum = 0;
+        int leftSum = 0;
 
-        // Calculate the prefix sum array
-        int[] prefixSum = new int[n];
-        prefixSum[0] = nums[0];
-        for (int i = 1; i < n; i++) {
-            prefixSum[i] = nums[i] + prefixSum[i - 1];
+        for(int ele : nums) {
+            rightSum += ele;   // right sum "TOTAL SUM"
         }
 
-        // Calculate the reverse prefix sum array
-        int[] suffixSum = new int[n];
-        suffixSum[n - 1] = nums[n - 1];
-        for (int i = n - 2; i >= 0; i--) {
-            suffixSum[i] = nums[i] + suffixSum[i + 1];
-        }
-
-        // Finding the pivot
-        for (int i = 0; i < n; i++) {
-            if (prefixSum[i] == suffixSum[i]) {
-                return i; // Pivot found
+        for(int i = 0; i < nums.length; i++) {
+            rightSum -= nums[i];
+            if(leftSum == rightSum) {
+                return i;
             }
+            leftSum += nums[i];
         }
-
-        return -1; // Pivot not found
-        
+        return -1;
     }
 }
