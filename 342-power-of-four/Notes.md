@@ -1,1 +1,1 @@
-<h2>power-of-four Notes</h2><hr>Best Sol
+<h2>power-of-four Notes</h2><hr>Best Solution 
