@@ -1,24 +1,25 @@
 class Solution {
     public int minimumLength(String s) {
         int n = s.length();
-        int result = Integer.MAX_VALUE;
+
         int left = 0;
         int right = n-1;
 
+        char arr[] = s.toCharArray();
+
         while(left < right) {
-            if(s.charAt(left) != s.charAt(right)) {
+            if(arr[left] == arr[right]) {
+                left++;
+                right--;
+                
+                while(left < right && arr[left] == arr[left-1]) left++;
+                while(left <= right && arr[right] == arr[right+1]) right--;
+            }
+            else {
                 break;
             }
-            
-            char c = s.charAt(left);
-                
-            while(left <= right && c == s.charAt(left)) left++;
-
-            // left can reach right, so need to check for equality also
-            while(left <= right && c == s.charAt(right)) right--;
-
         }
 
-        return right - left + 1;
+        return right - left + 1; 
     }
 }
