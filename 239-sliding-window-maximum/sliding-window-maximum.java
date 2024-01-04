@@ -1,42 +1,27 @@
 class Solution {
     public int[] maxSlidingWindow(int[] nums, int k) {
+        int n = nums.length;
+        int result[] = new int[n-k+1];
+        int st = 0;
 
-        // Initialize an array to store the indices of the nge for each element
-		int nge[] = new int[nums.length];
-
-		Stack<Integer> st = new Stack<>();  // stack to help find NGE
-
-		// calculate NGE for each element in the inout array 
-		for(int i = nums.length -1; i >= 0; i--) {
-			while(!st.isEmpty() && nums[i] >= nums[st.peek()]) { // st mein index hai 
-				st.pop();
-			}
-
-			if(st.isEmpty()) {
-				nge[i] = nums.length;  // why not -1 think once
-			} else {
-				nge[i] = st.peek();
-			}
-
-			st.push(i);
-		}
-
-		
-		// Now that we have the NGE information, we can find the 
-		// maximum in sliding window
-		int[] result = new int[nums.length - k + 1];  
-		
-		for (int i = 0; i <= nums.length - k; i++) {
-			// Initialize j to the current window's starting index.
-            int j = i;
-
-			// Find the maximum element within the current window by iterating through NGE indices.
-            while (nge[j] < i + k) {  
-                j = nge[j];
+        Deque<Integer> dq = new ArrayDeque<>();  // storing index
+        for(int i = 0; i < n; i++) {
+            // removing index from front which is not in range of k 
+            while(!dq.isEmpty() && dq.peek() < i-k+1) {
+                dq.poll();
             }
-            result[i] = nums[j];   // assign the max ele found to the result array for the current window 
+
+            // removing index from last which has smaller value than curr element 
+            while(!dq.isEmpty() && nums[dq.peekLast()] < nums[i]) {
+                dq.pollLast();
+            }
+            
+            dq.offer(i);
+            if(i >= k -1) {
+                result[st++] = nums[dq.peek()];
+            }
         }
-		
-        return result;  // return the ans 
+
+        return result;
     }
 }
