@@ -1,1 +1,1 @@
-<h2>minimum-window-substring Notes</h2><hr>Beter 
+<h2>minimum-window-substring Notes</h2><hr>Be
