@@ -1,13 +1,9 @@
 public class Solution {
     // you need to treat n as an unsigned value
     public int hammingWeight(int n) {
-        int setBitCount = 0;
+        if(n == 0) return 0;
+        if(n == 1) return 1;
 
-        while(n != 0) {
-            n &= (n-1);  // to clear the right most set bit
-            setBitCount++;
-        }
-
-        return setBitCount;
+        return hammingWeight(n & (n-1)) + 1;
     }
 }
