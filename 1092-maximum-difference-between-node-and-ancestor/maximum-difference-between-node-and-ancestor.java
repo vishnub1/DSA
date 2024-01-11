@@ -14,26 +14,23 @@
  * }
  */
 class Solution {
-    
-    public int helper(TreeNode root, int max, int min) {
-        if(root == null) return Integer.MIN_VALUE;
 
-        // Update max and min values seen so far based on the current node's value
-        max = Math.max(max, root.val);
+    public int findMaxDiff(TreeNode root, int min, int max) {
+        if(root == null) {
+            return Math.abs(max - min);
+        }
+
         min = Math.min(min, root.val);
+        max = Math.max(max, root.val);
 
-        // Recursively explore left and right subtrees, tracking maximum differences
-        int left = helper(root.left, max, min);
-        int right = helper(root.right, max, min);
+        int l = findMaxDiff(root.left, min, max);
+        int r = findMaxDiff(root.right, min, max);
 
-        // Return the maximum difference among:
-        // - The difference between the current max and min
-        // - The maximum difference found in the left subtree
-        // - The maximum difference found in the right subtree
-        return Math.max(max - min, Math.max(left, right));
+        return Math.max(l, r);
     }
-    
+
+
     public int maxAncestorDiff(TreeNode root) {
-        return helper(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        return findMaxDiff(root, root.val, root.val);
     }
 }
