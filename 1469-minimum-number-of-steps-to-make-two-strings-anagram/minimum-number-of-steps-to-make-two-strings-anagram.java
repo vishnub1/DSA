@@ -1,21 +1,22 @@
 class Solution {
     public int minSteps(String s, String t) {
+        // freq array 
+        int[] count = new int[26];
         
-        HashMap<Character, Integer> map = new HashMap<>();
+        // Storing the difference of frequencies of characters in t and s
         for(int i = 0; i < s.length(); i++) {
-            char sChar = s.charAt(i);
-            char tChar = t.charAt(i);
-
-            map.put(sChar, map.getOrDefault(sChar, 0) + 1);
-            map.put(tChar, map.getOrDefault(tChar, 0) - 1);
+            count[s.charAt(i) - 'a']++;
+            count[t.charAt(i) - 'a']--;
         }
 
-        // Absolute Sum
-        int sum = 0; 
-        for(int i : map.values()) {
-            sum += Math.abs(i);
+        int ans = 0;
+        // Adding the difference where string t has more instances than s
+        // Ignoring where t has fewer instances as they are redundant and
+        // can be covered by the first case
+        for(int i = 0; i < 26; i++) {
+            ans += Math.max(0, count[i]);
         }
-
-        return sum/2;         
+        
+        return ans;
     }
 }
