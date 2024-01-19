@@ -1,47 +1,41 @@
 class Solution {
-    
-   public static boolean dfs(List<List<Integer>> graph, boolean vis[], boolean path[], int curr) {
-        // mark
-        path[curr] = true;
-        vis[curr] = true;
-
-        // Work - nothing
-
-        // Try to visit unvisited nbrs
-        for (int nbrs : graph.get(curr)) {
-            if (path[nbrs]) return true;  // cycle found
-            else if (!vis[nbrs]) {  // visit unvisited nbrs
-                boolean isCyclic = dfs(graph, vis, path, nbrs);
-                if (isCyclic) return true;
-            }
-        }
-        // Unmark the path array
-        path[curr] = false;  // backtracking
-        return false;
-    }
-
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-        List<List<Integer>> graph = new ArrayList<>();
+        int[] inDegree = new int[numCourses];
+        ArrayList<ArrayList<Integer>> graph = new ArrayList<>(numCourses);
+
         for (int i = 0; i < numCourses; i++) {
-            graph.add(new ArrayList<Integer>());
+            graph.add(new ArrayList<>());
         }
 
-        // Pushing the graph value to adj list
-        for (int[] prereq : prerequisites) {
-            graph.get(prereq[1]).add(prereq[0]);
+        for (int[] prerequisite : prerequisites) {
+            int course = prerequisite[0];
+            int prerequisiteCourse = prerequisite[1];
+            inDegree[course]++;
+            graph.get(prerequisiteCourse).add(course);
         }
 
-        boolean vis[] = new boolean[numCourses];
-        boolean path[] = new boolean[numCourses];
+        Queue<Integer> queue = new LinkedList<>();
 
-        // Applying dfs
-        for (int src = 0; src < numCourses; src++) {
-            if (!vis[src]) {
-                // Try to find a cycle in the component where src is treated as the src
-                if (dfs(graph, vis, path, src)) return false;
+        for (int i = 0; i < numCourses; i++) {
+            if (inDegree[i] == 0) {
+                queue.add(i);
             }
         }
-        return true; // no cycle found
-    }
 
+        int coursesVisited = 0; // New variable to track the number of visited courses
+
+        while (!queue.isEmpty()) {
+            int currentCourse = queue.poll();
+            coursesVisited++;
+
+            for (int neighbor : graph.get(currentCourse)) {
+                inDegree[neighbor]--;
+                if (inDegree[neighbor] == 0) {
+                    queue.add(neighbor);
+                }
+            }
+        }
+
+        return coursesVisited == numCourses;
+    }
 }
