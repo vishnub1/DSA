@@ -1,37 +1,28 @@
 class Solution {
+    public void dfs(int[][] image, int r, int c, int color, int newColor) {
+        if(image[r][c] == color){  // color is the first color at {sr,sc,} before chinging
+            image[r][c] = newColor;
 
-    //DSF 
-    public void dfs(int[][] ans, int row, int col, int[][] image, 
-            int newColor, int[] delRow, int[] delCol, int iniColor) {
-
-        // coloring 
-        ans[row][col] = newColor;
-        int n = image.length;
-        int m = image[0].length;
-
-        for(int i = 0; i < 4; i++) {
-            int nrow = row + delRow[i];
-            int ncol = col + delCol[i];
-
-            if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m && 
-            image[nrow][ncol] == iniColor  && ans[nrow][ncol] != newColor) {
-                dfs(ans, nrow, ncol, image, newColor, delRow, delCol, iniColor);
+            if(r >= 1) {
+                dfs(image, r - 1, c, color, newColor); // left
+            }
+            if(c >= 1) {
+                dfs(image, r, c - 1, color, newColor); // up 
+            }
+            if(r+1 < image.length) {
+                dfs(image, r+1, c, color, newColor);
+            }
+            if(c+1 < image[0].length) {
+                dfs(image, r, c + 1, color, newColor);
             }
         }
-
     }
-
-
-    public int[][] floodFill(int[][] image, int sr, int sc, int color) {
-        int iniColor = image[sr][sc];  // initial color
-        int [][] ans = image; // copy 
-
-        //{L, R, U, D}
-        int delRow[] = {0, 0, -1, 1};
-        int delCol[] = {-1, 1, 0, 0};
-
-        dfs(ans, sr, sc, image, color, delRow, delCol, iniColor);
-
-        return ans;
+    
+    public int[][] floodFill(int[][] image, int sr, int sc, int newColor) {
+        int color = image[sr][sc];
+        if(color != newColor) {
+            dfs(image, sr, sc, color, newColor);
+        }
+        return image;
     }
 }
