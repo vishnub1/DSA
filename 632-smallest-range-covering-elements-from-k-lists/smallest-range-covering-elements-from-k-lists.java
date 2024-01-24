@@ -19,8 +19,8 @@ class Solution {
             int[] arr = pq.poll();
 
             int minVal = arr[0];
-            int currRange =  maxVal - minVal + 1; // maxVal - min + 1 from curr arr
-            int resRange = res[1] - res[0] + 1;  // maxVal - min + 1 from result
+            int currRange =  maxVal - minVal; // maxVal - min + 1 from curr arr
+            int resRange = res[1] - res[0];  // maxVal - min + 1 from result
 
             // Updating ans array if it's valid
             if(currRange < resRange) {
