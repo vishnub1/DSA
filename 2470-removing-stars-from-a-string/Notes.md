@@ -1,1 +1,1 @@
-<h2>removing-stars-from-a-string Notes</h2><hr>Using Str
+<h2>removing-stars-from-a-string Notes</h2><hr>Using Strinf
