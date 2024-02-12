@@ -1,2 +1,2 @@
 <h2>kth-smallest-element-in-a-sorted-matrix Notes</h2><hr>n^2 solution 
-sc - o1
+sc - O
