@@ -1,18 +1,17 @@
 class Solution {
     public int removeDuplicates(int[] nums) {
-        if (nums.length == 0) {
-            return 0;
-        }
+        // using to pointer approach
+
+        int i = 0; // pointer1
         
-        int count = 1; // Initialize count to 1 for the first element
-        
-        for (int i = 1; i < nums.length; i++) {
-            if (nums[i] != nums[i - 1]) {
-                nums[count] = nums[i];
-                count++;
+        for(int j = 1; j < nums.length; j++) {
+            if(nums[j] != nums[i]) {
+                i++;
+                nums[i]  = nums[j];
             }
         }
 
-        return count;
+        return i + 1;
+
     }
 }
