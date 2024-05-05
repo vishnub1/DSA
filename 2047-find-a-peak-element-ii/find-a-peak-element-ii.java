@@ -1,40 +1,39 @@
 class Solution {
-    // maxInCol
-    public int maxInCol(int mat[][], int n, int m, int col) {
-        int maxVal = Integer.MIN_VALUE;
-        int row = -1;
-        for(int i = 0; i < n; i++) {  // checking vertically
-            if(mat[i][col] > maxVal) {
-                maxVal = mat[i][col];
-                row = i;
+    public int[] findPeakGrid(int[][] mat) {
+        int[] result = new int[2];
+        int row = mat.length; // number of rows
+        int col = mat[0].length; // number of columns
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                // Check if the current element is a peak by comparing with its neighbors
+                if (isPeak(mat, i, j, row, col)) {
+                    result[0] = i;
+                    result[1] = j;
+                    return result;
+                }
             }
         }
-        return row;
+
+        return result;
     }
 
-    public int[] findPeakGrid(int[][] mat) {
-        int n = mat.length;   // row 
-        int m = mat[0].length;  // col
+    // Helper function to check if the current element is a peak
+    private boolean isPeak(int[][] mat, int i, int j, int row, int col) {
+        int current = mat[i][j];
 
-        int low = 0; 
-        int high = m - 1;
-
-        while(low <= high) {
-            int mid = (low + high) / 2;
-            int row = maxInCol(mat, n, m, mid);  // max in col(mid value col) then will get max row index
-
-            int left = mid > 0 ? mat[row][mid-1] : -1; 
-            int right = mid < m-1 ? mat[row][mid+1] : -1;
-
-            if(mat[row][mid] > left && mat[row][mid] > right) {
-                return new int[]{row, mid};
-            } else if (mat[row][mid] < left) {  // eleminate right part
-                high = mid - 1;
-            } else {   // mat[row][mid] < right)
-                low = mid + 1;
-            }
+        if (j > 0 && mat[i][j - 1] > current) {  // checking UP
+            return false;
         }
-        // dummy return if peak not found
-        return new int[]{-1, -1};
+        if (j < col - 1 && mat[i][j + 1] > current) { // checking Down 
+            return false;
+        }
+        if (i > 0 && mat[i - 1][j] > current) { // checking LEFT
+            return false;
+        }
+        if (i < row - 1 && mat[i + 1][j] > current) {  // checking RIGHT
+            return false;
+        }
+        return true;
     }
 }
