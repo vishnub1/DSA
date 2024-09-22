@@ -1,32 +1,41 @@
+import java.util.Stack;
+
 class Solution {
     public boolean checkValidString(String s) {
-        int low = 0;  // minimum number of open parentheses
-        int high = 0; // maximum number of open parentheses
-        
-        for (char c : s.toCharArray()) {
+        Stack<Integer> openStack = new Stack<>(); // Stack to store indices of '('
+        Stack<Integer> starStack = new Stack<>(); // Stack to store indices of '*'
+
+        // Traverse through the string
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+
             if (c == '(') {
-                low++;   // Increase low because ( adds to open parentheses
-                high++;  // Increase high because it also adds to open parentheses
+                openStack.push(i); // Push index of '(' to openStack
+            } else if (c == '*') {
+                starStack.push(i); // Push index of '*' to starStack
             } else if (c == ')') {
-                low--;   // Decrease low because ) can close an open parenthesis
-                high--;  // Decrease high for the same reason
-                
-                // We cannot have less than 0 open parentheses
-                if (high < 0) {
-                    return false;  // More ) than ( means invalid
+                if (!openStack.isEmpty()) {
+                    openStack.pop(); // Match ')' with '('
+                } else if (!starStack.isEmpty()) {
+                    starStack.pop(); // Match ')' with '*' (treat * as '(')
+                } else {
+                    return false; // No matching '(' or '*' for ')', so invalid
                 }
-            } else { // c == '*'
-                low--;   // Treat * as ) or empty
-                high++;  // Treat * as ( 
-            }
-            
-            // Ensure that low doesn't drop below 0
-            if (low < 0) {
-                low = 0;
             }
         }
-        
-        // At the end, low must be 0 to ensure all open parentheses are closed
-        return low == 0;
+
+        // Now try to match remaining '(' in openStack with '*' from starStack
+        while (!openStack.isEmpty()) {
+            if (starStack.isEmpty()) {
+                return false; // No '*' left to match with '('
+            } else if (openStack.peek() < starStack.peek()) {
+                openStack.pop(); // Match '(' with '*' occurring after it
+                starStack.pop();
+            } else {
+                return false; // '(' occurs after '*' which can't match, so invalid
+            }
+        }
+
+        return true; // All parentheses are balanced
     }
 }
