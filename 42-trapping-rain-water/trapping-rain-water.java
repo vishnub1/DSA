@@ -1,34 +1,37 @@
 class Solution {
     public int trap(int[] height) {
-        int n  = height.length;
+        int n = height.length;
 
-        // STEP 1 Make a prefix array maximum 
-        int maximumTillNow = 0;
         int prefixMax[] = new int[n];
+        int suffixMax[] = new int[n];
 
-		for(int i = 0; i < n; i++) {
-			if(height[i] > maximumTillNow) {
-				maximumTillNow = height[i];
-			}
-			prefixMax[i] = maximumTillNow;
-		}
+        int currMax = 0;
 
-        // STEP 2 Prefix Maximun () maximum so far
-		maximumTillNow = 0;
-		int suffixMax[] = new int[n];
-		for(int i = n-1; i >= 0; i--) {
-			if(height[i] > maximumTillNow) {
-				maximumTillNow = height[i];
-			}
-			suffixMax[i] = maximumTillNow;
-		}
+        // Prefix Max Right to left 
+        for(int i = 0; i < n; i++) {
+            if(currMax < height[i]) {
+                currMax = height[i];
+            }
+            prefixMax[i] = currMax;
+        }
 
-        // STEP3 Find WATER 
-		int totalWater = 0;
-		for(int i = 0; i < n; i++) {
-			int currWater = Math.min(suffixMax[i], prefixMax[i]) - height[i];
-			totalWater += currWater;
-		}
+        // Suffix Max Left to Right 
+        currMax = 0;
+        for(int i = n-1; i >= 0; i--) {
+            if(currMax < height[i]) {
+                currMax = height[i];
+            }
+            suffixMax[i] = currMax;
+        }
+
+
+        // Calculating total water 
+        int totalWater = 0;
+        for(int i =0 ; i < n; i++) {
+            int currWater = Math.min(suffixMax[i], prefixMax[i]) - height[i];
+            totalWater += currWater;
+        }
+
         return totalWater;
     }
 }
