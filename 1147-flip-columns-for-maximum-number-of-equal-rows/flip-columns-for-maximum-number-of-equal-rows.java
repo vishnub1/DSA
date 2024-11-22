@@ -1,33 +1,36 @@
 class Solution {
 
     public int maxEqualRowsAfterFlips(int[][] matrix) {
-        int numCols = matrix[0].length;
-        int maxIdenticalRows = 0;
+        // Map to store frequency of each pattern
+        Map<String, Integer> patternFrequency = new HashMap<>();
 
         for (int[] currentRow : matrix) {
-            // Create array to store flipped version of current row
-            int[] flippedRow = new int[numCols];
-            int identicalRowCount = 0;
+            StringBuilder patternBuilder = new StringBuilder("");
 
-            // Create flipped version of current row (0->1, 1->0)
-            for (int col = 0; col < numCols; col++) {
-                flippedRow[col] = 1 - currentRow[col];
-            }
-
-            // Check every row against current row and its flipped version
-            for (int[] compareRow : matrix) {
-                // If row matches either original or flipped pattern, increment counter
-                if (
-                    Arrays.equals(compareRow, currentRow) ||
-                    Arrays.equals(compareRow, flippedRow)
-                ) {
-                    identicalRowCount++;
+            // Convert row to pattern relative to its first element
+            for (int col = 0; col < currentRow.length; col++) {
+                // 'T' if current element matches first element, 'F' otherwise
+                if (currentRow[0] == currentRow[col]) {
+                    patternBuilder.append("T");
+                } else {
+                    patternBuilder.append("F");
                 }
             }
 
-            maxIdenticalRows = Math.max(maxIdenticalRows, identicalRowCount);
+            // Convert pattern to string and update its frequency in map
+            String rowPattern = patternBuilder.toString();
+            patternFrequency.put(
+                rowPattern,
+                patternFrequency.getOrDefault(rowPattern, 0) + 1
+            );
         }
 
-        return maxIdenticalRows;
+        // Find the pattern with maximum frequency
+        int maxFrequency = 0;
+        for (int frequency : patternFrequency.values()) {
+            maxFrequency = Math.max(frequency, maxFrequency);
+        }
+
+        return maxFrequency;
     }
 }
